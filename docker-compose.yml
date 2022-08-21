@@ -1,0 +1,53 @@
+# For more information: https://laravel.com/docs/sail
+version: '3'
+services:
+    # api
+    api:
+        build:
+            args:
+                user: antoniojr
+                uid: 1000
+            context: ./
+            dockerfile: Dockerfile
+        image: laravel-app
+        restart: unless-stopped
+        working_dir: /var/www/
+        volumes: 
+            - ./:/var/www
+        depends_on:
+            - db
+        networks:
+            - api-cs
+    # nginx
+    nginx:
+        image: nginx:alpine
+        restart: unless-stopped
+        ports:
+            - 8000:80
+            - 443:443
+        depends_on:
+            - api
+        volumes: 
+            - ./:/var/www
+            - ./docker/nginx/:/etc/nginx/conf.d/
+        networks:
+            - api-cs
+    
+    # mysql   
+    db:
+        image: 'mysql:8.0'
+        restart: unless-stopped
+        environment:
+            MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+            MYSQL_DATABASE: db-contato-seguro
+            MYSQL_ROOT_HOST: '%'
+        volumes:
+            - ./.docker/mysql/dbdata:/var/lib/mysql
+        ports:
+            - 3306:3306
+        networks:
+            - api-cs
+
+networks:
+    api-cs:
+        driver: bridge
