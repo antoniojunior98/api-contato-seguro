@@ -29,9 +29,9 @@ class UserRequest extends FormRequest
             return [
                 'name' => 'required|string',
                 'email' => 'required|email',
-                'telephone' => 'telephone',
-                'birthday' => 'date',
-                'city' => 'check_city',
+                'telephone' => 'nullable|telephone',
+                'birthday' => 'nullable|date',
+                'city' => 'required|check_city',
                 'companies' => 'required|check_companies'
             ];
     }
