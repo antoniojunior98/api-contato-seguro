@@ -31,7 +31,7 @@ class UserRequest extends FormRequest
                 'email' => 'required|email',
                 'telephone' => 'nullable|telephone',
                 'birthday' => 'nullable|date',
-                'city' => 'required|check_city',
+                'city' => 'nullable|check_city',
                 'companies' => 'required|check_companies'
             ];
     }
